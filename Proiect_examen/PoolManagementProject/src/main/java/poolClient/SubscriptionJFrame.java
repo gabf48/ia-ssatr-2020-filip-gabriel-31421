@@ -166,24 +166,21 @@ public class SubscriptionJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-          int days = Integer.parseInt(this.jComboBox1.getSelectedItem().toString());
-         
-          String subscriptionType = (String) jComboBox2.getSelectedItem();
-          if(subscriptionType.equals("For kids under 10 years")){
-          jTextField1.setText(String.valueOf(days*30)+ " RON");
-          }
-          if(subscriptionType.equals("With equipment")){
-          jTextField1.setText(String.valueOf(days*150)+ " RON");
-          }
-          if(subscriptionType.equals("Without equipment")){
-          jTextField1.setText(String.valueOf(days*75) + " RON");
-          }
-          if(subscriptionType.equals("With teacher")){
-          jTextField1.setText(String.valueOf(days*450)+ " RON");
-          }
-          if(subscriptionType.equals("For pensioners")){
-          jTextField1.setText(String.valueOf(days*32)+ " RON");
-          }
+        try {
+            int days = Integer.parseInt(this.jComboBox1.getSelectedItem().toString());
+            String subscriptionType = (String) jComboBox2.getSelectedItem();
+            
+            String sql = "SELECT PRICE FROM SUBSCRIPTIONS WHERE NAME = '" + subscriptionType +"'";
+            
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                jTextField1.setText(String.valueOf(days*rs.getInt("price"))+ " RON");  
+            }
+  
+        } catch (SQLException ex) {
+            Logger.getLogger(SubscriptionJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
           
         
         
